@@ -1,0 +1,28 @@
+import { LitElement, html, customElement, property } from 'lit-element';
+
+@customElement('my-element')
+export class MyElement extends LitElement {
+    @property()
+    foo = {"firstName":"Jayce",
+    "lastName":"Jack",
+    "email":"123@gmail.com"};
+
+    render() {
+        return html`
+        <h1 style = 'color:red;'>${this.foo.firstName}</h1>
+        <h2 style = "font-family:fantasy;">${this.foo.lastName}</h2>
+        <p>${this.foo.email}</p>`;
+    }
+
+    firstUpdated(changedProperties:any) {
+        changedProperties.forEach((oldValue:any , propName:any) => {
+          console.log(`${propName} changed. oldValue: ${oldValue}`);
+        });
+        fetch('api/user')
+            .then((response) => response.json())
+            .then((bodyRes) =>{ 
+                this.foo=bodyRes;
+            });
+        }
+}
+
